@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>Etsy Listing Title & Tag A/B Testing Tool | SEO Score & Keyword Density</title>
+    <meta name="description" content="Free, no‑backend A/B testing tool for Etsy sellers. Compare two listing title & tag variants side‑by‑side: SEO score, character count, keyword density. Perfect for Etsy SEO optimization.">
+    <meta name="keywords" content="etsy listing title generator, csv to etsy bulk listing, json to csv converter, shopify seo meta tag, amazon product seo, etsy sellers, csv/json tools, developer tools, etsy listing title & tag a/b testing tool">
+    <meta name="author" content="EtsySellerToolkit (demo)">
+    <meta property="og:title" content="Etsy Listing Title & Tag A/B Testing Tool">
+    <meta property="og:description" content="Side‑by‑side SEO comparison for Etsy listings. Character count, keyword density, SEO score – no backend, instant results.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://demo.etsytoolkit.example/ab-testing">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Etsy Listing Title & Tag A/B Testing Tool">
+    <meta name="twitter:description" content="Compare two title/tag variants for Etsy SEO. Free, instant, mobile friendly.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f7f9fc;
+            color: #1a2634;
+            line-height: 1.5;
+            padding: 1.5rem 1rem;
+        }
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(145deg, #0f4c5c, #2a6f7f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        header p {
+            max-width: 650px;
+            margin: 0.5rem auto 0;
+            color: #3b4a5a;
+            font-size: 1.05rem;
+        }
+        .tool-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.8rem;
+            margin: 2rem 0;
+        }
+        @media (max-width: 700px) {
+            .tool-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+        .variant-card {
+            background: white;
+            border-radius: 24px;
+            padding: 1.5rem 1.2rem 1.8rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.03), 0 2px 6px rgba(0,20,30,0.05);
+            border: 1px solid #e6edf2;
+            transition: box-shadow 0.2s;
+        }
+        .variant-card:hover {
+            box-shadow: 0 12px 28px rgba(0,0,0,0.05);
+        }
+        .variant-card h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .variant-card h2 span {
+            background: #dce8ef;
+            font-size: 0.8rem;
+            font-weight: 500;
+            padding: 0.2rem 0.7rem;
+            border-radius: 40px;
+            color: #1f3a4b;
+        }
+        .input-group {
+            margin-bottom: 1rem;
+        }
+        .input-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #2b3e4e;
+            margin-bottom: 0.25rem;
+        }
+        .input-group textarea, .input-group input {
+            width: 100%;
+            padding: 0.7rem 0.9rem;
+            border: 1px solid #cfdde8;
+            border-radius: 16px;
+            font-size: 0.95rem;
+            background: #ffffff;
+            transition: 0.15s;
+            font-family: inherit;
+        }
+        .input-group textarea {
+            min-height: 70px;
+            resize: vertical;
+        }
+        .input-group textarea:focus, .input-group input:focus {
+            outline: none;
+            border-color: #2f7a8c;
+            box-shadow: 0 0 0 3px rgba(47,122,140,0.15);
+        }
+        .stats-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem 1.2rem;
+            margin: 1rem 0 0.6rem;
+            background: #f2f6fa;
+            padding: 0.8rem 1rem;
+            border-radius: 20px;
+        }
+        .stat-item {
+            display: flex;
+            align-items: baseline;
+            gap: 0.3rem;
+            font-size: 0.9rem;
+        }
+        .stat-item strong {
+            font-weight: 600;
+            color: #0f3b48;
+        }
+        .seo-score {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #1b6b7a;
+        }
+        .keyword-density {
+            margin-top: 0.8rem;
+            border-top: 1px dashed #d3e0e9;
+            padding-top: 0.6rem;
+        }
+        .keyword-density summary {
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #1f4b5a;
+        }
+        .density-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem 0.8rem;
+            margin-top: 0.5rem;
+        }
+        .density-tag {
+            background: #e5eef5;
+            padding: 0.2rem 0.7rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            color: #1d3c4a;
+        }
+        .density-tag span {
+            font-weight: 600;
+            margin-left: 0.2rem;
+        }
+        .placeholder-ad {
+            background: #f2f0ea;
+            border-radius: 20px;
+            padding: 1.2rem 1.5rem;
+            margin: 1.8rem 0 1.2rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #e0dcd2;
+        }
+        .placeholder-ad p {
+            font-size: 0.95rem;
+            color: #3d3a30;
+        }
+        .placeholder-ad .badge {
+            background: #b8a99a;
+            color: white;
+            padding: 0.2rem 0.9rem;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+        .affiliate-resources {
+            background: #eaf0f5;
+            border-radius: 24px;
+            padding: 1.5rem 1.8rem;
+            margin: 2rem 0 1.5rem;
+            border: 1px solid #d3dfe8;
+        }
+        .affiliate-resources h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1b3b47;
+        }
+        .affiliate-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem 2rem;
+        }
+        .affiliate-links a {
+            color: #1f6275;
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px dotted #8aaebd;
+        }
+        .affiliate-links a:hover {
+            color: #0c3f4e;
+            border-bottom: 1px solid #0c3f4e;
+        }
+        .privacy-note {
+            font-size: 0.8rem;
+            color: #4f6577;
+            background: #eef3f7;
+            padding: 0.8rem 1.2rem;
+            border-radius: 60px;
+            display: inline-block;
+            margin: 1.5rem 0 0.8rem;
+            border: 1px solid #d5e0e9;
+        }
+        .footer-meta {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            gap: 0.8rem;
+        }
+        .report-event-note {
+            font-size: 0.75rem;
+            color: #5b7184;
+        }
+        button.utility-btn {
+            background: none;
+            border: 1px solid #bccfd8;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            color: #1b3b47;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        button.utility-btn:hover {
+            background: #dce8ef;
+        }
+        .char-warning {
+            color: #b13e3e;
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+        }
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            border: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>✧ Etsy Title & Tag A/B Tester</h1>
+        <p>Paste two title + tag variants. Compare SEO score, character count, and keyword density side‑by‑side. No backend, instant results.</p>
+    </header>
+
+    <!-- main tool -->
+    <div class="tool-grid" id="toolGrid">
+        <!-- Variant A -->
+        <div class="variant-card" role="region" aria-label="Variant A">
+            <h2>A <span>control</span></h2>
+            <div class="input-group">
+                <label for="titleA">Listing Title</label>
+                <textarea id="titleA" placeholder="e.g. Handmade Wool Beanie – Winter Hat, Unisex Gift" rows="2">Cozy Handmade Knit Beanie – Winter Hat for Men & Women, Organic Cotton</textarea>
+            </div>
+            <div class="input-group">
+                <label for="tagsA">Tags (comma separated)</label>
+                <input type="text" id="tagsA" placeholder="beanie, winter hat, knit cap, gift" value="beanie, winter hat, knit cap, organic cotton, handmade gift">
+            </div>
+            <div id="statsA" class="stats-row" aria-live="polite">
+                <span class="stat-item">📏 <strong id="charCountA">0</strong> chars</span>
+                <span class="stat-item">🏷️ <strong id="tagCountA">0</strong> tags</span>
+                <span class="stat-item seo-score" id="seoScoreA">SEO 78</span>
+            </div>
+            <div class="keyword-density">
+                <details>
+                    <summary>🔍 Keyword density (top 5)</summary>
+                    <div id="densityA" class="density-list">—</div>
+                </details>
+            </div>
+        </div>
+
+        <!-- Variant B -->
+        <div class="variant-card" role="region" aria-label="Variant B">
+            <h2>B <span>variant</span></h2>
+            <div class="input-group">
+                <label for="titleB">Listing Title</label>
+                <textarea id="titleB" placeholder="e.g. Organic Cotton Beanie – Eco Friendly Winter Hat" rows="2">Eco Friendly Organic Cotton Beanie – Unisex Winter Hat, Handmade Knit Cap</textarea>
+            </div>
+            <div class="input-group">
+                <label for="tagsB">Tags (comma separated)</label>
+                <input type="text" id="tagsB" placeholder="beanie, organic, winter, hat, gift" value="organic beanie, winter hat, eco friendly, knit cap, handmade">
+            </div>
+            <div id="statsB" class="stats-row" aria-live="polite">
+                <span class="stat-item">📏 <strong id="charCountB">0</strong> chars</span>
+                <span class="stat-item">🏷️ <strong id="tagCountB">0</strong> tags</span>
+                <span class="stat-item seo-score" id="seoScoreB">SEO 82</span>
+            </div>
+            <div class="keyword-density">
+                <details>
+                    <summary>🔍 Keyword density (top 5)</summary>
+                    <div id="densityB" class="density-list">—</div>
+                </details>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ad placeholder (visible) -->
+    <div class="placeholder-ad" aria-label="Sponsored suggestion">
+        <div><span class="badge">📌 SPONSORED</span> <p style="display:inline; margin-left:0.6rem;"><strong>EtsySellerKit</strong> – CSV bulk editor & tag optimizer. <a href="#" style="color:#1f6275;">Try free tool →</a></p></div>
+        <span style="font-size:0.7rem; color:#6f7a82;">affiliate</span>
+    </div>
+
+    <!-- Affiliate / resource placeholder -->
+    <div class="affiliate-resources">
+        <h3>📘 Etsy SEO resources & tools</h3>
+        <div class="affiliate-links">
+            <a href="#" target="_blank" rel="noopener">Etsy Tag Generator (free)</a>
+            <a href="#" target="_blank" rel="noopener">CSV to Etsy Bulk Listing</a>
+            <a href="#" target="_blank" rel="noopener">Shopify SEO Meta Tag Guide</a>
+            <a href="#" target="_blank" rel="noopener">Amazon Product SEO tips</a>
+            <a href="#" target="_blank" rel="noopener">JSON to CSV converter</a>
+        </div>
+        <p style="margin-top:0.6rem; font-size:0.8rem; color:#3b5b6b;">Some links are affiliate – we may earn a small commission.</p>
+    </div>
+
+    <!-- Privacy + event reporting -->
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.8rem;">
+        <div class="privacy-note">
+            🔒 Events may be counted anonymously for product improvement. No personal data collected.
+        </div>
+        <button class="utility-btn" id="simulateReportBtn" aria-label="Simulate report event">📊 test reportEvent</button>
+    </div>
+    <div class="footer-meta">
+        <span class="report-event-note">reportEvent(name, payload) → posts to ORGANISM_METRICS_ENDPOINT if configured.</span>
+        <span style="font-size:0.7rem; color:#6b7f8b;">v1.0 • pure frontend</span>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // ----- DOM refs -----
+        const titleA = document.getElementById('titleA');
+        const tagsA = document.getElementById('tagsA');
+        const titleB = document.getElementById('titleB');
+        const tagsB = document.getElementById('tagsB');
+
+        const charCountA = document.getElementById('charCountA');
+        const tagCountA = document.getElementById('tagCountA');
+        const seoScoreA = document.getElementById('seoScoreA');
+        const densityA = document.getElementById('densityA');
+
+        const charCountB = document.getElementById('charCountB');
+        const tagCountB = document.getElementById('tagCountB');
+        const seoScoreB = document.getElementById('seoScoreB');
+        const densityB = document.getElementById('densityB');
+
+        // ----- helpers -----
+        function parseTags(raw) {
+            return raw.split(',')
+                .map(t => t.trim())
+                .filter(t => t.length > 0);
+        }
+
+        function computeKeywordDensity(text, tagsArray) {
+            // combine title + tags into a single corpus (lowercased)
+            const corpus = (text + ' ' + tagsArray.join(' ')).toLowerCase();
+            // simple tokenization: split on non-alphanumeric (keep hyphens?)
+            const words = corpus.split(/[^a-z0-9'-]+/).filter(w => w.length > 1);
+            const freq = {};
+            words.forEach(w => {
+                freq[w] = (freq[w] || 0) + 1;
+            });
+            const total = words.length || 1;
+            const sorted = Object.entries(freq).sort((a,b) => b[1] - a[1]);
+            const top5 = sorted.slice(0,5);
+            return top5.map(([word, count]) => {
+                const pct = ((count / total) * 100).toFixed(1);
+                return { word, count, pct };
+            });
+        }
+
+        function computeSeoScore(title, tagsArray) {
+            let score = 40; // base
+            // title length bonus (ideal 40-80 chars)
+            const tLen = title.length;
+            if (tLen >= 30 && tLen <= 80) score += 15;
+            else if (tLen > 80) score += 5;
+            else if (tLen < 30) score += 2;
+
+            // tag count (ideal 5-13)
+            const tagCount = tagsArray.length;
+            if (tagCount >= 5 && tagCount <= 13) score += 15;
+            else if (tagCount > 13) score += 5;
+            else if (tagCount > 0) score += 3;
+
+            // keyword repetition / title includes some tag words?
+            const titleLower = title.toLowerCase();
+            let matchCount = 0;
+            tagsArray.forEach(tag => {
+                const tagLower = tag.toLowerCase();
+                if (titleLower.includes(tagLower)) matchCount++;
+            });
+            score += Math.min(matchCount * 4, 20);
+
+            // bonus if title has more than 3 words
+            const wordCount = title.split(/\s+/).filter(w => w.length>0).length;
+            if (wordCount >= 5) score += 5;
+            else if (wordCount >= 3) score += 2;
+
+            // clamp
+            return Math.min(Math.max(score, 0), 100);
+        }
+
+        function updateVariant(titleEl, tagsEl, charEl, tagCountEl, seoEl, densityEl) {
+            const title = titleEl.value;
+            const rawTags = tagsEl.value;
+            const tagsArray = parseTags(rawTags);
+            const charCount = title.length;
+            const tagCount = tagsArray.length;
+
+            charEl.textContent = charCount;
+            tagCountEl.textContent = tagCount;
+
+            // SEO score
+            const seo = computeSeoScore(title, tagsArray);
+            seoEl.textContent = `SEO ${seo}`;
+
+            // keyword density
+            const density = computeKeywordDensity(title, tagsArray);
+            if (density.length === 0) {
+                densityEl.innerHTML = '<span class="density-tag">no keywords</span>';
+            } else {
+                densityEl.innerHTML = density.map(d => 
+                    `<span class="density-tag">${d.word} <span>${d.pct}%</span></span>`
+                ).join('');
+            }
+        }
+
+        function updateAll() {
+            updateVariant(titleA, tagsA, charCountA, tagCountA, seoScoreA, densityA);
+            updateVariant(titleB, tagsB, charCountB, tagCountB, seoScoreB, densityB);
+        }
+
+        // ----- event reporting (lightweight) -----
+        window.reportEvent = function(name, payload) {
+            if (typeof window.ORGANISM_METRICS_ENDPOINT === 'string' && window.ORGANISM_METRICS_ENDPOINT.length > 0) {
+                try {
+                    const body = JSON.stringify({ event: name, payload: payload || {}, timestamp: Date.now() });
+                    if (navigator.sendBeacon) {
+                        navigator.sendBeacon(window.ORGANISM_METRICS_ENDPOINT, body);
+                    } else {
+                        fetch(window.ORGANISM_METRICS_ENDPOINT, {
+                            method: 'POST',
+                            body: body,
+                            keepalive: true,
+                            headers: { 'Content-Type': 'application/json' }
+                        }).catch(() => {});
+                    }
+                } catch (e) {
+                    // silent
+                }
+            }
+        };
+
+        // ----- attach listeners -----
+        [titleA, tagsA, titleB, tagsB].forEach(el => {
+            el.addEventListener('input', updateAll);
+        });
+
+        // initial update
+        updateAll();
+
+        // demo: reportEvent on button click (simulate)
+        document.getElementById('simulateReportBtn').addEventListener('click', function() {
+            window.reportEvent('ab_test_view', { variant: 'demo', tool: 'EtsyTitleTagAB' });
+            // also show feedback (optional)
+            const btn = this;
+            const original = btn.textContent;
+            btn.textContent = '✅ event sent (if endpoint set)';
+            setTimeout(() => { btn.textContent = original; }, 2000);
+        });
+
+        // on page load, report a view event (passive)
+        window.addEventListener('load', function() {
+            window.reportEvent('page_view', { page: 'etsy_ab_testing_tool' });
+        });
+
+        // expose for debugging
+        console.log('Etsy A/B tool ready. reportEvent() available globally.');
+    })();
+</script>
+
+<!-- hidden note: ORGANISM_METRICS_ENDPOINT can be set via window -->
+
+<section data-organism-discovery="hub" style="margin:32px auto 20px;max-width:1040px;padding:16px;border-top:1px solid #d9e2ec;color:#475569;font:14px/1.5 system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
+  <strong style="display:block;color:#0f172a;margin-bottom:6px">More free browser tools</strong>
+  <p style="margin:0 0 8px">This page is part of an autonomous micro-tool network. Explore the live tool directory and related utilities.</p>
+  <p style="margin:0"><a href="https://kingms888.github.io/do-digital-organism-index/" style="color:#0f766e;font-weight:700">Open the tool directory</a> </p>
+</section>
+</body>
+</html>
